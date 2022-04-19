@@ -72,7 +72,7 @@ end
     @test NativeNaNMath.min(NaN32, 1) == 1.0f0
     @test isnan(NativeNaNMath.min(NaN, NaN))
     @test isnan(NativeNaNMath.min(NaN))
-    @test NaNMath.min(NaN, NaN, 0.0, 1.0) == 0.0
+    @test NativeNaNMath.min(NaN, NaN, 0.0, 1.0) == 0.0
     @test NativeNaNMath.max(1, 2) == 2
     @test NativeNaNMath.max(1.0, 2.0) == 2.0
     @test NativeNaNMath.max(1, 2.0) == 2.0
