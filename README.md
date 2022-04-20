@@ -24,7 +24,7 @@ The following functions are not exported but defined:
     - `acosh(x)`,`asech(x)`,`atanh(x)`,`acoth(x)`
 - `sqrt(x)`
 - `pow(x,y)`
-- `min(x)`,`max(x)`,`minmax(x)`
+- `min(x)`,`max(x)`
 
 ## `skipnan`
 

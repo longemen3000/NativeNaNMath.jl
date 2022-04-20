@@ -6,7 +6,7 @@ using Base: IEEEFloat
 
 include("nanbase.jl")
 using .NaNBase: SkipNaN, nan, skipnan
-
+export skipnan
 #functions with non-negative domain
 for f in (:log,:log2,:log10,
         :sqrt)
