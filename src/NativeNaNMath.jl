@@ -32,15 +32,15 @@ function log(x::Real,base::Real)
     Base.log(ifelse(in_domain,x,nan(x)),ifelse(in_domain,base,nan(base)))
 end
 
-#displaced 
+# comain: >= -1 
 log1p(x) = Base.log1p(x)
 function log1p(x::Real)
     in_domain = x >= -one(x)
     Base.log1p(ifelse(in_domain,x,nan(x)))
 end
 
+
 #functions with finite domain:
-#the value is set to zero if not it domain
 for f in (:sin,:sind,:sinpi,
         :cos,:cosd,:cospi,
         :tan,:tand,
@@ -68,11 +68,10 @@ for f in (:sincos,:sincosd,:sincospi)
     end
 end
     
-#functions with domain in -1 <= x <= 1
-#the value is set to zero if not it domain
+#domain: -1 <= x <= 1
 for f in (:asin,:asind,
     :acos,:acosd,
-    )
+    :atanh)
     @eval begin
         $f(x) = Base.$f(x)
         function $f(x::Real)
@@ -82,23 +81,39 @@ for f in (:asin,:asind,
     end
 end
 
+#domain: -Inf <= x <= -1 || 1 <= x <= Inf
 for f in (:asec,:asecd,
-    :acsc,:acscd,
+        :acsc,:acscd,
+        :acoth
     )
     @eval begin
         $f(x) = Base.$f(x)
         function $f(x::Real)
-            in_domain = !iszero(x)
+            in_domain = abs(x) >= 1
             Base.$f(ifelse(in_domain,x,nan(x)))
         end
     end
+end
+
+#domain: >= 1 
+acosh(x) = Base.acosh(x)
+function acosh(x::Real)
+    in_domain = x >= one(x)
+    Base.acosh(ifelse(in_domain,x,nan(x)))
+end
+
+#domain: 0 <= x <= 1
+asech(x) = Base.asech(x)
+function asech(x::Real)
+    in_domain = zero(x) <= x <= one(x)  
+    Base.asech(ifelse(in_domain,x,nan(x)))
 end
 
 # Don't override built-in ^ operator
 function pow(x::Real, y::Real)
     z = ifelse(x>=zero(x),x,nan(x))
     return z^y
-end 
+end
 
 pow(x,y) = x^y
 
