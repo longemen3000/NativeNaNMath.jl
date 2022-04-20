@@ -28,7 +28,7 @@ The following functions are not exported but defined:
 
 ## `skipnan`
 
-The package only sports a single function: `skipnan(itr)` that works in the same way that `skipmissing(itr)`:
+The package only exports a single function: `skipnan(itr)` that works in the same way that `skipmissing(itr)`:
 ```julia
 x = collect(1.0:10.0)
 x[end] = NaN
