@@ -1,6 +1,6 @@
 @testset "skipnan" begin
     x = skipnan([1, 2, NaN, 4])
-    @test repr(x) = "skipnan([1.0, 2.0, NaN, 4.0])"
+    @test repr(x) == "skipnan([1.0, 2.0, NaN, 4.0])"
     @test eltype(x) === Float64
     @test collect(x) == [1., 2., 4.]
     @test collect(x) isa Vector{Float64}
