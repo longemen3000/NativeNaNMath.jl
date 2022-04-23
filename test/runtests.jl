@@ -143,7 +143,7 @@ end
     @test !isnan(NativeNaNMath.acoth(-2.))
 end
 
-@testest "other domains" begin
+@testset "other domains" begin
     #acosh: x >= 1
     @test !isnan(NativeNaNMath.acosh(2))
     @test isnan(NativeNaNMath.acosh(0))
