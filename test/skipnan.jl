@@ -62,10 +62,17 @@
             @test_throws BoundsError x[3, 1]
             @test findfirst(==(2), x) === nothing
             @test isempty(findall(==(2), x))
-            @test_throws ArgumentError argmin(x)
-            @test_throws ArgumentError findmin(x)
-            @test_throws ArgumentError argmax(x)
-            @test_throws ArgumentError findmax(x)
+            if Base.VERSION <= v"1.7"
+                @test_throws ArgumentError argmin(x)
+                @test_throws ArgumentError findmin(x)
+                @test_throws ArgumentError argmax(x)
+                @test_throws ArgumentError findmax(x)
+            else
+                @test_throws MethodError argmin(x)
+                @test_throws MethodError findmin(x)
+                @test_throws MethodError argmax(x)
+                @test_throws MethodError findmax(x)
+            end
         end
     end
 
