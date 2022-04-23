@@ -28,9 +28,9 @@
     @testset "indexing" begin
         x = skipnan([1, NaN, 2, NaN, NaN])
         @test collect(eachindex(x)) == collect(keys(x)) == [1, 3]
-        @test x[1] === 1
-        @test x[3] === 2
-        @test_throws MissingException x[2]
+        @test x[1] === 1.
+        @test x[3] === 2.
+        @test_throws ErrorException x[2]
         @test_throws BoundsError x[6]
         @test findfirst(==(2), x) == 3
         @test findall(==(2), x) == [3]
@@ -42,10 +42,10 @@
         x = skipnan([NaN 2; 1 NaN])
         @test collect(eachindex(x)) == [2, 3]
         @test collect(keys(x)) == [CartesianIndex(2, 1), CartesianIndex(1, 2)]
-        @test x[2] === x[2, 1] === 1
-        @test x[3] === x[1, 2] === 2
-        @test_throws MissingException x[1]
-        @test_throws MissingException x[1, 1]
+        @test x[2] === x[2, 1] === 1.
+        @test x[3] === x[1, 2] === 2.
+        @test_throws ErrorException x[1]
+        @test_throws ErrorException x[1, 1]
         @test_throws BoundsError x[5]
         @test_throws BoundsError x[3, 1]
         @test findfirst(==(2), x) == CartesianIndex(1, 2)
@@ -62,10 +62,10 @@
             @test_throws BoundsError x[3, 1]
             @test findfirst(==(2), x) === nothing
             @test isempty(findall(==(2), x))
-            @test_throws "reducing over an empty collection is not allowed" argmin(x)
-            @test_throws "reducing over an empty collection is not allowed" findmin(x)
-            @test_throws "reducing over an empty collection is not allowed" argmax(x)
-            @test_throws "reducing over an empty collection is not allowed" findmax(x)
+            @test_throws ArgumentError argmin(x)
+            @test_throws ArgumentError findmin(x)
+            @test_throws ArgumentError argmax(x)
+            @test_throws ArgumentError findmax(x)
         end
     end
 
@@ -111,10 +111,12 @@
 
         for n in 0:3
             itr = skipnan(Vector{Float64}(fill(NaN, n)))
-            @test sum(itr) == reduce(+, itr) == mapreduce(identity, +, itr) === 0
-            @test_throws "reducing over an empty collection is not allowed" reduce(x -> x/2, itr)
-            @test_throws "reducing over an empty collection is not allowed" mapreduce(x -> x/2, +, itr)
+            @test sum(itr) == reduce(+, itr) == mapreduce(identity, +, itr) === 0.
+            @test_throws ArgumentError reduce(x -> x/2, itr)
+            @test_throws ArgumentError mapreduce(x -> x/2, +, itr)
         end
+    end
+end
 #=
         # issue #35504
         nt = NamedTuple{(:x, :y),Tuple{Union{Missing, Int},Union{Missing, Float64}}}(
@@ -132,8 +134,7 @@
             oa = OffsetArray(v, typemax(Int)-length(v))
             sm = skipnan(oa)
             @test sum(sm) == 0
-        end
-    end
+
 
     @testset "filter" begin
         allmiss = Vector{Union{Int,Missing}}(missing, 10)
