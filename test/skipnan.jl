@@ -1,3 +1,5 @@
+
+
 @testset "skipnan" begin
     x = skipnan([1, 2, NaN, 4])
     @test eltype(x) === Float64
@@ -62,7 +64,6 @@
             @test_throws BoundsError x[3, 1]
             @test findfirst(==(2), x) === nothing
             @test isempty(findall(==(2), x))
-            @show Base.VERSION < v"1.8"
             if Base.VERSION < v"1.8"
                 @test_throws ArgumentError argmin(x)
                 @test_throws ArgumentError findmin(x)
@@ -120,8 +121,13 @@
         for n in 0:3
             itr = skipnan(Vector{Float64}(fill(NaN, n)))
             @test sum(itr) == reduce(+, itr) == mapreduce(identity, +, itr) === 0.
-            @test_throws ArgumentError reduce(x -> x/2, itr)
-            @test_throws ArgumentError mapreduce(x -> x/2, +, itr)
+            if Base.VERSION < v"1.8"
+                @test_throws ArgumentError reduce(x -> x/2, itr)
+                @test_throws ArgumentError mapreduce(x -> x/2, +, itr)
+            else
+                @test_throws MethodError reduce(x -> x/2, itr)
+                @test_throws MethodError mapreduce(x -> x/2, +, itr)
+            end  
         end
     end
 end
