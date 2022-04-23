@@ -1,6 +1,7 @@
 @testset "nan" begin
     for T in (Int8,Int16,Int32,Int64,Float32,Float64,BigFloat,BigInt,Rational{Int},Rational{BigInt})
-    @test isnan(nan(T))
+        @test isnan(nan(T))
+    end
 end
 
 @testset "log" begin
