@@ -62,7 +62,7 @@
             @test_throws BoundsError x[3, 1]
             @test findfirst(==(2), x) === nothing
             @test isempty(findall(==(2), x))
-            if Base.VERSION <= v"1.7"
+            if Base.VERSION < v"1.8"
                 @test_throws ArgumentError argmin(x)
                 @test_throws ArgumentError findmin(x)
                 @test_throws ArgumentError argmax(x)

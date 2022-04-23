@@ -2,7 +2,6 @@
 
 module NaNBase
     const BigNaN = big"NaN"
-
     @inline nan(::T) where T = nan(T)
     @inline nan(::Type{Float16}) = NaN16
     @inline nan(::Type{Float32}) = NaN32
@@ -12,7 +11,7 @@ module NaNBase
     @inline nan(::Type{BigInt}) = BigNaN
     @inline nan(::Type{T}) where T<:Real = zero(T)/zero(T)
     #check if this gives out the correct behaviour.
-    @inline nan(::Type{<:Rational{T}}) where T = Base.unsafe_rational(zero(T),zero(T))
+    @inline nan(::Type{<:Rational{T}}) where T = nan(T)
 struct SkipNaN{T}
     x::T
 end
