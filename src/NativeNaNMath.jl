@@ -51,7 +51,6 @@ for f in (:sin,:sind,:sinpi,
     end
 end
 
-#two calls to nan(x) seems excessive. consider using native BigFloat call instead
 for f in (:sincos,:sincosd,:sincospi)
     @eval begin
         $f(x) = Base.$f(x)
@@ -104,8 +103,31 @@ function asech(x::Real)
 end
 
 # Don't override built-in ^ operator
+
+"""
+    pow(x,y)
+
+Exponentiation operator. 
+
+For arguments `!(x<:Real) | !(y<:Real)` it will use `Base.^`.
+
+For `x<:Real & y<:Real`, it will always return an number capable of holding NaNs. It will return NaNs if `x<0`
+
+## Examples
+```jldoctest
+julia> NativeNaNMath.pow(2,3)
+8.0
+julia> NativeNaNMath.pow(2,-3)
+0.125
+julia> NativeNaNMath.pow(2.0,3.0)
+8.0
+julia> NativeNaNMath.pow(-2.0,3.0)
+NaN
+```
+"""
 function pow(x::Real, y::Real)
-    z = ifelse(x>=zero(x),x,nan(x))
+    x,y,_nan = promote(x,y,nan(x)) #this will make pow type-stable, at the cost of losing Integer exponentiation
+    z = ifelse(x>=zero(x),x,_nan)
     return z^y
 end
 
@@ -173,4 +195,4 @@ for f in (:min, :max)
     @eval ($f)(a, b, c, xs...) = Base.afoldl($f, ($f)(($f)(a, b), c), xs...)
 end
 
-end
+end #module

@@ -4,6 +4,11 @@ using Test, Statistics
 @testset "log" begin
     @test isnan(NativeNaNMath.log(-10))
     @test isnan(NativeNaNMath.log1p(-100))
+    @test isnan(NativeNaNMath.log2(-100))
+    @test isnan(NativeNaNMath.log10(-100))
+    @test isnan(NativeNaNMath.log(-10,2))
+    @test isnan(NativeNaNMath.log(10,-2))
+    @test isnan(NativeNaNMath.log(-2,-2))
 end
 
 @testset "pow" begin
@@ -25,6 +30,128 @@ end
 @testset "sqrt" begin
     @test isnan(NativeNaNMath.sqrt(-5))
     @test NativeNaNMath.sqrt(5) == Base.sqrt(5)
+end
+
+@testset "finite domain" begin
+    @test isnan(NativeNaNMath.sin(Inf))
+    @test isnan(NativeNaNMath.sind(Inf))
+    @test isnan(NativeNaNMath.sinpi(Inf))
+    @test isnan(NativeNaNMath.cos(Inf))
+    @test isnan(NativeNaNMath.cosd(Inf))
+    @test isnan(NativeNaNMath.cospi(Inf))
+    @test isnan(NativeNaNMath.tan(Inf))
+    @test isnan(NativeNaNMath.tand(Inf))
+    @test isnan(NativeNaNMath.sec(Inf))
+    @test isnan(NativeNaNMath.secd(Inf))
+    @test isnan(NativeNaNMath.cot(Inf))
+    @test isnan(NativeNaNMath.cotd(Inf))
+    @test isnan(NativeNaNMath.csc(Inf))
+    @test isnan(NativeNaNMath.cscd(Inf))
+    
+    @test isnan(NativeNaNMath.sin(-Inf))
+    @test isnan(NativeNaNMath.sind(-Inf))
+    @test isnan(NativeNaNMath.sinpi(-Inf))
+    @test isnan(NativeNaNMath.cos(-Inf))
+    @test isnan(NativeNaNMath.cosd(-Inf))
+    @test isnan(NativeNaNMath.cospi(-Inf))
+    @test isnan(NativeNaNMath.tan(-Inf))
+    @test isnan(NativeNaNMath.tand(-Inf))
+    @test isnan(NativeNaNMath.sec(-Inf))
+    @test isnan(NativeNaNMath.secd(-Inf))
+    @test isnan(NativeNaNMath.cot(-Inf))
+    @test isnan(NativeNaNMath.cotd(-Inf))
+    @test isnan(NativeNaNMath.csc(-Inf))
+    @test isnan(NativeNaNMath.cscd(-Inf))
+
+    @test !isnan(NativeNaNMath.sin(-2.3))
+    @test !isnan(NativeNaNMath.sind(-2.3))
+    @test !isnan(NativeNaNMath.sinpi(-2.3))
+    @test !isnan(NativeNaNMath.cos(-2.3))
+    @test !isnan(NativeNaNMath.cosd(-2.3))
+    @test !isnan(NativeNaNMath.cospi(-2.3))
+    @test !isnan(NativeNaNMath.tan(-2.3))
+    @test !isnan(NativeNaNMath.tand(-2.3))
+    @test !isnan(NativeNaNMath.sec(-2.3))
+    @test !isnan(NativeNaNMath.secd(-2.3))
+    @test !isnan(NativeNaNMath.cot(-2.3))
+    @test !isnan(NativeNaNMath.cotd(-2.3))
+    @test !isnan(NativeNaNMath.csc(-2.3))
+    @test !isnan(NativeNaNMath.cscd(-2.3))
+
+    @test isnan.(NativeNaNMath.sincos(Inf)) |> all
+    @test isnan.(NativeNaNMath.sincospi(Inf)) |> all
+    @test isnan.(NativeNaNMath.sincosd(Inf)) |> all
+
+    @test isnan.(NativeNaNMath.sincos(-Inf)) |> all
+    @test isnan.(NativeNaNMath.sincospi(-Inf)) |> all
+    @test isnan.(NativeNaNMath.sincosd(-Inf)) |> all
+
+    @test !all(isnan.(NativeNaNMath.sincos(-2.3)))
+    @test !all(isnan.(NativeNaNMath.sincospi(-2.3)))
+    @test !all(isnan.(NativeNaNMath.sincosd(-2.3)))
+end
+
+@testset "0 <= x <= 1" begin
+    @test isnan(NativeNaNMath.asin(2.))
+    @test isnan(NativeNaNMath.asind(2.))
+    @test isnan(NativeNaNMath.acos(2.))
+    @test isnan(NativeNaNMath.acosd(2.))
+    @test isnan(NativeNaNMath.atanh(2.))
+
+    @test isnan(NativeNaNMath.asin(-2.))
+    @test isnan(NativeNaNMath.asind(-2.))
+    @test isnan(NativeNaNMath.acos(-2.))
+    @test isnan(NativeNaNMath.acosd(-2.))
+    @test isnan(NativeNaNMath.atanh(-2.))
+
+    @test !isnan(NativeNaNMath.asin(0.))
+    @test !isnan(NativeNaNMath.asind(0.))
+    @test !isnan(NativeNaNMath.acos(0.))
+    @test !isnan(NativeNaNMath.acosd(0.))
+    @test !isnan(NativeNaNMath.atanh(0.))
+
+    @test !isnan(NativeNaNMath.asin(-1.))
+    @test !isnan(NativeNaNMath.asind(-1.))
+    @test !isnan(NativeNaNMath.acos(-1.))
+    @test !isnan(NativeNaNMath.acosd(-1.))
+    @test !isnan(NativeNaNMath.atanh(-1.))
+
+    @test !isnan(NativeNaNMath.asin(1.))
+    @test !isnan(NativeNaNMath.asind(1.))
+    @test !isnan(NativeNaNMath.acos(1.))
+    @test !isnan(NativeNaNMath.acosd(1.))
+    @test !isnan(NativeNaNMath.atanh(1.))
+end
+
+@testset  "x ∉ (0,1)" begin
+    @test isnan(NativeNaNMath.asec(0.))
+    @test isnan(NativeNaNMath.asecd(0.))
+    @test isnan(NativeNaNMath.acsc(0.))
+    @test isnan(NativeNaNMath.acscd(0.))
+    @test isnan(NativeNaNMath.acoth(0.))
+
+    @test !isnan(NativeNaNMath.asec(2.))
+    @test !isnan(NativeNaNMath.asecd(2.))
+    @test !isnan(NativeNaNMath.acsc(2.))
+    @test !isnan(NativeNaNMath.acscd(2.))
+    @test !isnan(NativeNaNMath.acoth(2.))
+
+    @test !isnan(NativeNaNMath.asec(-2.))
+    @test !isnan(NativeNaNMath.asecd(-2.))
+    @test !isnan(NativeNaNMath.acsc(-2.))
+    @test !isnan(NativeNaNMath.acscd(-2.))
+    @test !isnan(NativeNaNMath.acoth(-2.))
+end
+
+@testest "other domains" begin
+    #acosh: x >= 1
+    @test !isnan(NativeNaNMath.acosh(2))
+    @test isnan(NativeNaNMath.acosh(0))
+    #asech: 0 <= x <= 1
+    @test !isnan(NativeNaNMath.asech(0.5))
+    @test isnan(NativeNaNMath.asech(2))
+    @test isnan(NativeNaNMath.asech(-2))
+
 end
 
 @testset "reductions" begin
