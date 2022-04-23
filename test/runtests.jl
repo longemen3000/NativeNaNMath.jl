@@ -1,5 +1,5 @@
 using NativeNaNMath
-using NativeNaNMath: skipnan
+using NativeNaNMath: skipnan,nan
 using Test, Statistics
 const randmatrix = rand(2,2)
 const randdiag = [rand() 0.;0. rand()]

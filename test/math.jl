@@ -1,3 +1,8 @@
+@testset "nan" begin
+    for T in (Int8,Int16,Int32,Int64,Float32,Float64,BigFloat,BigInt,Rational{Int},Rational{BigInt})
+    @test isnan(nan(T))
+end
+
 @testset "log" begin
     @test isnan(NativeNaNMath.log(-10))
     @test isnan(NativeNaNMath.log1p(-100))
