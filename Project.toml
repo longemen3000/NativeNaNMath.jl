@@ -1,7 +1,7 @@
 name = "NativeNaNMath"
 uuid = "6e4fe5f8-bc0f-434f-9b40-863822321529"
-authors = ["longemen3000 <longemen3000@gmail.com> and contributors"]
-version = "0.1.0"
+authors = ["Andrés Riedemann <longemen3000@gmail.com> and contributors"]
+version = "1.0.0"
 
 [deps]
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
