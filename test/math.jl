@@ -1,5 +1,5 @@
 @testset "nan" begin
-    for T in (Int8,Int16,Int32,Int64,Float32,Float64,BigFloat,BigInt,Rational{Int},Rational{BigInt})
+    for T in (Int8,Int16,Int32,Int64,Float16,Float32,Float64,BigFloat,BigInt,Rational{Int},Rational{BigInt})
         @test isnan(nan(T))
     end
 end
@@ -16,6 +16,7 @@ end
     @test NativeNaNMath.log2(Complex(2)) == Base.log2(Complex(2))
     @test NativeNaNMath.log10(Complex(2)) == Base.log10(Complex(2))
     @test NativeNaNMath.log1p(Complex(2)) == Base.log1p(Complex(2))
+    @test NativeNaNMath.log(Complex(2),Complex(2)) == Base.log(Complex(2),Complex(2))
 end
 
 @testset "pow" begin
@@ -99,6 +100,8 @@ end
     @test !all(isnan.(NativeNaNMath.sincosd(-2.3)))
 
     @test NativeNaNMath.sin(randdiag) == Base.sin(randdiag)
+    @test first(NativeNaNMath.sincos(randdiag)) == first(Base.sincos(randdiag))
+
 end
 
 @testset "0 <= x <= 1" begin
